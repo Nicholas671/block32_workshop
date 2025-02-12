@@ -13,3 +13,20 @@ const client = new Client({
     password: process.env.DB_PASSWORD,
 
 })
+
+client.connect();
+console.log('Connected to database');
+
+app.get('/flavors', async (req, res) => {
+    try {
+        const result = await client.query('SELECT * FROM flavors');
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+})
